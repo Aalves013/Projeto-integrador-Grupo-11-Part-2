@@ -64,3 +64,8 @@ content-type: application/json
   "categoria": "Analgésico"
 
 }
+
+###
+
+### Buscar categoria (retorna lista)
+GET http://localhost:3000/users/buscar?categoria
