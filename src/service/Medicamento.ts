@@ -9,7 +9,7 @@ export class MedicamentoService {
 
   createMedicamento(medicamento: {
     nome: String;
-    dosegem: Number;
+    dosagem: Number;
     forma_administrativa: String;
     dataFab: Number;
     dataVal: Number;
@@ -20,7 +20,7 @@ export class MedicamentoService {
   }): Medicamento {
     const medicamentoCreated = Medicamento.create(
       medicamento.nome,
-      medicamento.dosegem,
+      medicamento.dosagem,
       medicamento.forma_administrativa,
       medicamento.dataFab,
       medicamento.dataVal,

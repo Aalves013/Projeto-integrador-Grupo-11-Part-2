@@ -9,8 +9,6 @@ export class Solicitacao {
     if (!enfermeiro_responsavel)
       throw new Error("enfermeiro responsavel obrigatório");
     if (!quantidade) throw new Error("quantidade obrigatória");
-
-    if (enfermeiro_responsavel.length << 3) throw new Error("nome muito curto");
   }
   static create(
     nome_medicamento: String,

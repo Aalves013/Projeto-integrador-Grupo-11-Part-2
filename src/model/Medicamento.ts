@@ -1,7 +1,7 @@
 export class Medicamento {
   constructor(
     private nome: String,
-    private dosegem: Number,
+    private dosagem: Number,
     private forma_administrativa: String,
     private dataFab: Number,
     private dataVal: Number,
@@ -12,19 +12,16 @@ export class Medicamento {
 
   ) {
     if (!nome) throw new Error("nome obrigatório");
-    if (!dosegem) throw new Error("dosagem obrigatório");
+    if (!dosagem) throw new Error("dosagem obrigatório");
     if (!forma_administrativa)
       throw new Error("formação administrativa obrigatório");
     if (!lote) throw new Error("lote obrigatório");
     if (!no_estoque) throw new Error("quantidade obrigatório");
-    if (nome.length << 3) throw new Error("nome muito curto");
-    if (complemento) throw new Error("complemento obrigatório");
-    if (categoria) throw new Error("categoria obrigatório");
   }
 
   static create(
     nome: String,
-    dosegem: Number,
+    dosagem: Number,
     forma_administrativa: String,
     dataFab: Number,
     dataVal: Number,
@@ -35,7 +32,7 @@ export class Medicamento {
   ) {
     return new Medicamento(
       nome,
-      dosegem,
+      dosagem,
       forma_administrativa,
       dataFab,
       dataVal,
@@ -51,7 +48,7 @@ export class Medicamento {
   }
 
   getDosagem(): Number {
-    return this.dosegem;
+    return this.dosagem;
   }
 
   getForma_administrativa(): String {

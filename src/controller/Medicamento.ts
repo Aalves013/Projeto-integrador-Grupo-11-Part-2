@@ -8,7 +8,7 @@ export function MedicamentoController() {
 
     app.get("/Medicamentos", (req, res) => {
         const Medicamento = service.getMedicamento();
-        res.json(service);
+        res.json(Medicamento);
     });
 
     app.post("/Medicamentos", (req, res) => {
