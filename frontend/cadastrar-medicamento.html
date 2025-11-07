@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Medicamento - Sistema de Gerenciamento</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <h1>Sistema de Medicamentos</h1>
+                <div class="user-info">
+                    <span id="nomeUsuario">Bem-vindo!</span>
+                    <div class="nav">
+                        <a href="index.html" class="btn btn-primary">Medicamentos</a>
+                        <a href="cadastrar-medicamento.html" class="btn btn-success">Cadastrar Medicamento</a>
+                        <a href="solicitacoes.html" class="btn btn-secondary">Solicitações</a>
+                        <button onclick="logout()" class="btn btn-danger">Sair</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulário de Cadastro -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Cadastrar Novo Medicamento</h2>
+            </div>
+
+            <form id="cadastroMedicamentoForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nome">Nome do Medicamento *</label>
+                        <input
+                            type="text"
+                            id="nome"
+                            class="form-control"
+                            placeholder="Ex: Paracetamol"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dosagem">Dosagem (mg) *</label>
+                        <input
+                            type="number"
+                            id="dosagem"
+                            class="form-control"
+                            placeholder="Ex: 500"
+                            required
+                            min="1"
+                        >
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="forma_administrativa">Forma Administrativa *</label>
+                        <select id="forma_administrativa" class="form-control" required>
+                            <option value="">Selecione...</option>
+                            <option value="Comprimido">Comprimido</option>
+                            <option value="Cápsula">Cápsula</option>
+                            <option value="Xarope">Xarope</option>
+                            <option value="Injetável">Injetável</option>
+                            <option value="Pomada">Pomada</option>
+                            <option value="Gotas">Gotas</option>
+                            <option value="Spray">Spray</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="categoria">Categoria *</label>
+                        <select id="categoria" class="form-control" required>
+                            <option value="">Selecione...</option>
+                            <option value="Analgésico">Analgésico</option>
+                            <option value="Antibiótico">Antibiótico</option>
+                            <option value="Anti-inflamatório">Anti-inflamatório</option>
+                            <option value="Antialérgico">Antialérgico</option>
+                            <option value="Antitérmico">Antitérmico</option>
+                            <option value="Cardiovascular">Cardiovascular</option>
+                            <option value="Vitamina">Vitamina</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="lote">Número do Lote *</label>
+                        <input
+                            type="number"
+                            id="lote"
+                            class="form-control"
+                            placeholder="Ex: 123456"
+                            required
+                            min="1"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="no_estoque">Quantidade em Estoque *</label>
+                        <input
+                            type="number"
+                            id="no_estoque"
+                            class="form-control"
+                            placeholder="Ex: 100"
+                            required
+                            min="1"
+                        >
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dataFab">Data de Fabricação</label>
+                        <input
+                            type="date"
+                            id="dataFab"
+                            class="form-control"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dataVal">Data de Validade</label>
+                        <input
+                            type="date"
+                            id="dataVal"
+                            class="form-control"
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="complemento">Informações Complementares</label>
+                    <textarea
+                        id="complemento"
+                        class="form-control"
+                        rows="3"
+                        placeholder="Digite informações adicionais sobre o medicamento (opcional)"
+                    ></textarea>
+                </div>
+
+                <div class="form-row">
+                    <button type="submit" class="btn btn-success btn-block">Cadastrar Medicamento</button>
+                    <a href="index.html" class="btn btn-secondary btn-block">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        // Verificar autenticação
+        const user = verificarAutenticacao();
+        if (user) {
+            document.getElementById('nomeUsuario').textContent = `Olá, ${user.nome}`;
+        }
+
+        // Formulário de cadastro
+        document.getElementById('cadastroMedicamentoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const medicamentoData = {
+                nome: document.getElementById('nome').value,
+                dosagem: Number(document.getElementById('dosagem').value),
+                forma_administrativa: document.getElementById('forma_administrativa').value,
+                dataFab: document.getElementById('dataFab').value ? new Date(document.getElementById('dataFab').value).getTime() : null,
+                dataVal: document.getElementById('dataVal').value ? new Date(document.getElementById('dataVal').value).getTime() : null,
+                lote: Number(document.getElementById('lote').value),
+                no_estoque: Number(document.getElementById('no_estoque').value),
+                complemento: document.getElementById('complemento').value,
+                categoria: document.getElementById('categoria').value
+            };
+
+            cadastrarMedicamento(medicamentoData)
+                .then(data => {
+                    mostrarMensagem('Medicamento cadastrado com sucesso!', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                })
+                .catch(error => {
+                    mostrarMensagem(error.message, 'danger');
+                });
+        });
+    </script>
+</body>
+</html>

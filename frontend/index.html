@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicamentos - Sistema de Gerenciamento</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <h1>Sistema de Medicamentos</h1>
+                <div class="user-info">
+                    <span id="nomeUsuario">Bem-vindo!</span>
+                    <div class="nav">
+                        <a href="index.html" class="btn btn-primary">Medicamentos</a>
+                        <a href="cadastrar-medicamento.html" class="btn btn-success">Cadastrar Medicamento</a>
+                        <a href="solicitacoes.html" class="btn btn-secondary">Solicitações</a>
+                        <button onclick="logout()" class="btn btn-danger">Sair</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Filtrar Medicamentos</h2>
+            </div>
+
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="filtroCategoria">Categoria</label>
+                    <select id="filtroCategoria" class="form-control">
+                        <option value="">Todas as categorias</option>
+                        <option value="Analgésico">Analgésico</option>
+                        <option value="Antibiótico">Antibiótico</option>
+                        <option value="Anti-inflamatório">Anti-inflamatório</option>
+                        <option value="Antialérgico">Antialérgico</option>
+                        <option value="Antitérmico">Antitérmico</option>
+                        <option value="Cardiovascular">Cardiovascular</option>
+                        <option value="Vitamina">Vitamina</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+
+                <div class="filter-group" style="display: flex; align-items: flex-end;">
+                    <button onclick="aplicarFiltro()" class="btn btn-primary" style="width: 100%;">Filtrar</button>
+                </div>
+
+                <div class="filter-group" style="display: flex; align-items: flex-end;">
+                    <button onclick="limparFiltro()" class="btn btn-secondary" style="width: 100%;">Limpar Filtro</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Medicamentos -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Medicamentos Disponíveis</h2>
+            </div>
+
+            <div id="medicamentosContainer">
+                <div class="loading">Carregando medicamentos</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        // Verificar autenticação
+        const user = verificarAutenticacao();
+        if (user) {
+            document.getElementById('nomeUsuario').textContent = `Olá, ${user.nome}`;
+        }
+
+        // Função para carregar medicamentos
+        function carregarMedicamentos(categoria = null) {
+            const container = document.getElementById('medicamentosContainer');
+            container.innerHTML = '<div class="loading">Carregando medicamentos</div>';
+
+            listarMedicamentos(categoria)
+                .then(medicamentos => {
+                    if (medicamentos.length === 0) {
+                        container.innerHTML = `
+                            <div class="empty-state">
+                                <h3>Nenhum medicamento encontrado</h3>
+                                <p>Não há medicamentos cadastrados nesta categoria.</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    const html = `
+                        <div class="medicamentos-grid">
+                            ${medicamentos.map(med => criarCardMedicamento(med)).join('')}
+                        </div>
+                    `;
+
+                    container.innerHTML = html;
+                })
+                .catch(error => {
+                    container.innerHTML = `
+                        <div class="alert alert-danger">
+                            Erro ao carregar medicamentos: ${error.message}
+                        </div>
+                    `;
+                });
+        }
+
+        // Função para criar card de medicamento
+        function criarCardMedicamento(med) {
+            const estoque = Number(med.no_estoque || 0);
+            let estoqueClass = 'estoque-alto';
+            let estoqueTexto = 'Estoque Alto';
+
+            if (estoque < 10) {
+                estoqueClass = 'estoque-baixo';
+                estoqueTexto = 'Estoque Baixo';
+            } else if (estoque < 50) {
+                estoqueClass = 'estoque-medio';
+                estoqueTexto = 'Estoque Médio';
+            }
+
+            return `
+                <div class="medicamento-card">
+                    <h3>${med.nome || 'Sem nome'}</h3>
+                    <div class="medicamento-info">
+                        <p><strong>Dosagem:</strong> ${med.dosagem || 'N/A'} mg</p>
+                        <p><strong>Forma:</strong> ${med.forma_administrativa || 'N/A'}</p>
+                        <p><strong>Lote:</strong> ${med.lote || 'N/A'}</p>
+                        <p><strong>Estoque:</strong> ${estoque} unidades</p>
+                        <p><strong>Fabricação:</strong> ${formatarData(med.dataFab)}</p>
+                        <p><strong>Validade:</strong> ${formatarData(med.dataVal)}</p>
+                        ${med.complemento ? `<p><strong>Complemento:</strong> ${med.complemento}</p>` : ''}
+                        <span class="categoria-badge ${estoqueClass}">${estoqueTexto}</span>
+                        ${med.categoria ? `<span class="categoria-badge" style="background-color: #e3f2fd; color: #1976d2; margin-left: 5px;">${med.categoria}</span>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Função para aplicar filtro
+        function aplicarFiltro() {
+            const categoria = document.getElementById('filtroCategoria').value;
+            carregarMedicamentos(categoria || null);
+        }
+
+        // Função para limpar filtro
+        function limparFiltro() {
+            document.getElementById('filtroCategoria').value = '';
+            carregarMedicamentos();
+        }
+
+        // Carregar medicamentos ao iniciar
+        carregarMedicamentos();
+    </script>
+</body>
+</html>

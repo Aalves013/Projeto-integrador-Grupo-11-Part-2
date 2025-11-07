@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitações - Sistema de Gerenciamento</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <h1>Sistema de Medicamentos</h1>
+                <div class="user-info">
+                    <span id="nomeUsuario">Bem-vindo!</span>
+                    <div class="nav">
+                        <a href="index.html" class="btn btn-primary">Medicamentos</a>
+                        <a href="cadastrar-medicamento.html" class="btn btn-success">Cadastrar Medicamento</a>
+                        <a href="solicitacoes.html" class="btn btn-secondary">Solicitações</a>
+                        <button onclick="logout()" class="btn btn-danger">Sair</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nova Solicitação -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Nova Solicitação de Medicamento</h2>
+            </div>
+
+            <form id="novaSolicitacaoForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nome_medicamento">Nome do Medicamento *</label>
+                        <input
+                            type="text"
+                            id="nome_medicamento"
+                            class="form-control"
+                            placeholder="Digite o nome do medicamento"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantidade">Quantidade *</label>
+                        <input
+                            type="number"
+                            id="quantidade"
+                            class="form-control"
+                            placeholder="Quantidade solicitada"
+                            required
+                            min="1"
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="enfermeiro_responsavel">Enfermeiro Responsável *</label>
+                    <input
+                        type="text"
+                        id="enfermeiro_responsavel"
+                        class="form-control"
+                        placeholder="Nome do enfermeiro responsável"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn btn-success">Criar Solicitação</button>
+            </form>
+        </div>
+
+        <!-- Lista de Solicitações -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Histórico de Solicitações</h2>
+            </div>
+
+            <div id="solicitacoesContainer">
+                <div class="loading">Carregando solicitações</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        // Verificar autenticação
+        const user = verificarAutenticacao();
+        if (user) {
+            document.getElementById('nomeUsuario').textContent = `Olá, ${user.nome}`;
+
+            // Preencher automaticamente o enfermeiro se for do tipo enfermeiro
+            if (user.tipo_cadastro === 'enfermeiro') {
+                document.getElementById('enfermeiro_responsavel').value = user.nome;
+            }
+        }
+
+        // Função para carregar solicitações
+        function carregarSolicitacoes() {
+            const container = document.getElementById('solicitacoesContainer');
+            container.innerHTML = '<div class="loading">Carregando solicitações</div>';
+
+            listarSolicitacoes()
+                .then(solicitacoes => {
+                    if (solicitacoes.length === 0) {
+                        container.innerHTML = `
+                            <div class="empty-state">
+                                <h3>Nenhuma solicitação encontrada</h3>
+                                <p>Ainda não há solicitações cadastradas.</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    const html = `
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Medicamento</th>
+                                        <th>Enfermeiro Responsável</th>
+                                        <th>Quantidade</th>
+                                        <th>Data da Solicitação</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${solicitacoes.map(sol => `
+                                        <tr>
+                                            <td>${sol.nome_medicamento || 'N/A'}</td>
+                                            <td>${sol.enfermeiro_responsavel || 'N/A'}</td>
+                                            <td>${sol.quantidade || 0}</td>
+                                            <td>${formatarDataCompleta(sol.dataSolicitacao)}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+
+                    container.innerHTML = html;
+                })
+                .catch(error => {
+                    container.innerHTML = `
+                        <div class="alert alert-danger">
+                            Erro ao carregar solicitações: ${error.message}
+                        </div>
+                    `;
+                });
+        }
+
+        // Função para formatar data completa
+        function formatarDataCompleta(data) {
+            if (!data) return 'N/A';
+            const d = new Date(data);
+            return d.toLocaleString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Formulário de nova solicitação
+        document.getElementById('novaSolicitacaoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const solicitacaoData = {
+                nome_medicamento: document.getElementById('nome_medicamento').value,
+                enfermeiro_responsavel: document.getElementById('enfermeiro_responsavel').value,
+                quantidade: Number(document.getElementById('quantidade').value)
+            };
+
+            criarSolicitacao(solicitacaoData)
+                .then(data => {
+                    mostrarMensagem('Solicitação criada com sucesso!', 'success');
+
+                    // Limpar formulário
+                    document.getElementById('nome_medicamento').value = '';
+                    document.getElementById('quantidade').value = '';
+                    if (user.tipo_cadastro !== 'enfermeiro') {
+                        document.getElementById('enfermeiro_responsavel').value = '';
+                    }
+
+                    // Recarregar lista
+                    carregarSolicitacoes();
+                })
+                .catch(error => {
+                    mostrarMensagem(error.message, 'danger');
+                });
+        });
+
+        // Carregar solicitações ao iniciar
+        carregarSolicitacoes();
+    </script>
+</body>
+</html>
