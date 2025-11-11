@@ -6,7 +6,7 @@ export function MedicamentoController() {
     const list: Medicamento[] = [];
     const service = new MedicamentoService(list);
 
-    app.get("/Medicamentos", (req, res) => {
+    app.get("/api/Medicamentos", (req, res) => {
         const { categoria } = req.query;
 
         if (categoria) {
