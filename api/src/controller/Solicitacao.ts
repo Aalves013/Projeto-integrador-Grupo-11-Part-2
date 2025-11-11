@@ -6,7 +6,7 @@ export function SolicitacaoController() {
     const list: Solicitacao[] = [];
     const service = new solicitacaoService(list);
 
-    app.get("/solicitacoes", (req, res) => {
+    app.get("/api/solicitacoes", (req, res) => {
         const solicitacao = service.getSolicitacao();
         res.json(solicitacao);
     });
