@@ -6,18 +6,18 @@ export function UserController() {
     const list: User[] = [];
     const service = new userService(list);
 
-    app.get("/users", (req, res) => {
+    app.get("/api/users", (req, res) => {
         const users = service.getUser();
         res.json (users);
     });
 
-    app.post("/users", (req, res) => {
+    app.post("/api/users", (req, res) => {
         const UserData = req.body;
         const newUser = service.createUser(UserData)
         res.status(201).json(newUser);
     });
 
-    app.post("/login", (req, res) => {
+    app.post("/api/login", (req, res) => {
         const { email, senha } = req.body;
         try {
             const user = service.autenticar(email, senha);
@@ -35,7 +35,7 @@ export function UserController() {
         }
     });
 
-    app.get("/users/search", (req, res) => {
+    app.get("/api/users/search", (req, res) => {
         const {nome} = req.query;
 
         if (nome) {
