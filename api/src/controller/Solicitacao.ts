@@ -11,7 +11,7 @@ export function SolicitacaoController() {
         res.json(solicitacao);
     });
 
-    app.post("/solicitacoes", (req, res) => {
+    app.post("/api/solicitacoes", (req, res) => {
         const solicitacaoData = req.body;
         const newSolicitacao = service.createSolicitacao(solicitacaoData);
         res.status(201).json(newSolicitacao);
