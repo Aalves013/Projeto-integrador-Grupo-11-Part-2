@@ -18,7 +18,7 @@ export function MedicamentoController() {
         res.json(Medicamento);
     });
 
-    app.post("/Medicamentos", (req, res) => {
+    app.post("/api/Medicamentos", (req, res) => {
         const MedicamentoData = req.body;
         const newMedicamento = service.createMedicamento(MedicamentoData);
         res.status(201).json(newMedicamento);
