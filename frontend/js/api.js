@@ -1,5 +1,5 @@
 // Configuração da API
-const API_URL = 'http://localhost:3000';
+const API_URL = 'https://grupo11projeto20252.escolatecnicaadelia.info/api';
 
 // Funções de autenticação
 function login(email, senha) {
