@@ -498,3 +498,434 @@ tbody tr:hover {
 .d-block {
     display: block;
 }
+
+/* Widget de Suporte */
+.suporte-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.suporte-botao {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), #357abd);
+    color: var(--white);
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    position: relative;
+}
+
+.suporte-botao:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.suporte-botao.active {
+    background: linear-gradient(135deg, #357abd, var(--primary-color));
+}
+
+.suporte-icone {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.suporte-texto {
+    display: none;
+}
+
+.suporte-conteudo {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 380px;
+    max-height: 600px;
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.suporte-header {
+    background: linear-gradient(135deg, var(--primary-color), #357abd);
+    color: var(--white);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.suporte-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.suporte-fechar {
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 28px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.suporte-fechar:hover {
+    transform: rotate(90deg);
+}
+
+.suporte-body {
+    padding: 20px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+/* Menu do Suporte */
+.suporte-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.suporte-opcao {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border: 2px solid var(--light-color);
+    border-radius: var(--border-radius);
+    background-color: var(--white);
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: left;
+}
+
+.suporte-opcao:hover {
+    border-color: var(--primary-color);
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: var(--box-shadow);
+}
+
+.opcao-icone {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.opcao-texto {
+    flex: 1;
+}
+
+.opcao-texto strong {
+    display: block;
+    color: var(--dark-color);
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.opcao-texto small {
+    color: var(--gray);
+    font-size: 13px;
+}
+
+/* FAQ */
+.suporte-faq {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.suporte-faq h4 {
+    color: var(--primary-color);
+    margin: 15px 0;
+    font-size: 18px;
+}
+
+.suporte-voltar {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    align-self: flex-start;
+    transition: var(--transition);
+    border-radius: var(--border-radius);
+}
+
+.suporte-voltar:hover {
+    background-color: var(--light-color);
+}
+
+.faq-item {
+    border: 1px solid var(--light-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.faq-pergunta {
+    padding: 15px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.faq-pergunta:hover {
+    background-color: var(--light-color);
+}
+
+.faq-pergunta strong {
+    color: var(--dark-color);
+    font-size: 14px;
+}
+
+.faq-icone {
+    font-size: 20px;
+    color: var(--primary-color);
+    font-weight: bold;
+    transition: var(--transition);
+}
+
+.faq-item.active .faq-icone {
+    transform: rotate(45deg);
+}
+
+.faq-resposta {
+    padding: 0 15px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    background-color: var(--white);
+}
+
+.faq-item.active .faq-resposta {
+    padding: 15px;
+    max-height: 500px;
+}
+
+.faq-resposta p {
+    margin: 8px 0;
+    color: var(--dark-color);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Formulário de Chamado no Widget */
+.suporte-chamado {
+    display: flex;
+    flex-direction: column;
+}
+
+.suporte-chamado h4 {
+    color: var(--primary-color);
+    margin: 15px 0;
+    font-size: 18px;
+}
+
+.suporte-chamado .form-group {
+    margin-bottom: 15px;
+}
+
+.suporte-chamado .form-control {
+    font-size: 13px;
+    padding: 10px 12px;
+}
+
+.suporte-chamado textarea.form-control {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.suporte-chamado label {
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+/* Cards de Informação de Suporte */
+.suporte-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.info-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 12px;
+    color: white;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+}
+
+.info-icone {
+    font-size: 28px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.info-texto {
+    flex: 1;
+}
+
+.info-texto strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.info-texto p {
+    margin: 3px 0;
+    font-size: 13px;
+    opacity: 0.95;
+}
+
+/* Formulário de Chamado */
+.suporte-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.suporte-formulario .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.suporte-formulario label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.suporte-formulario input,
+.suporte-formulario textarea,
+.suporte-formulario select {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.suporte-formulario input:focus,
+.suporte-formulario textarea:focus,
+.suporte-formulario select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+}
+
+.suporte-formulario textarea {
+    resize: vertical;
+    min-height: 100px;
+    max-height: 200px;
+}
+
+.suporte-formulario .btn-enviar {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, var(--secondary-color), #27ae60);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.suporte-formulario .btn-enviar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+}
+
+.suporte-formulario .btn-enviar:active {
+    transform: translateY(0);
+}
+
+.suporte-formulario .btn-enviar:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.suporte-sucesso {
+    padding: 20px;
+    text-align: center;
+    color: var(--secondary-color);
+}
+
+.suporte-sucesso .icone-sucesso {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.suporte-sucesso h4 {
+    color: var(--secondary-color);
+    margin: 10px 0;
+}
+
+.suporte-sucesso p {
+    color: var(--dark-color);
+    font-size: 13px;
+    margin: 5px 0;
+}
+
+/* Responsive do Widget */
+@media (max-width: 480px) {
+    .suporte-conteudo {
+        width: calc(100vw - 40px);
+        right: -10px;
+    }
+
+    .suporte-botao {
+        width: 55px;
+        height: 55px;
+    }
+
+    .suporte-icone {
+        font-size: 24px;
+    }
+}
